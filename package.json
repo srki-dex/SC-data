@@ -1,0 +1,12 @@
+{
+  "name": "srkidex-screen-compare",
+  "main": "SC-data-main/index.html",
+  "window": {
+    "width": 768,
+    "height": 650,
+    "resizable": false,
+    "position": "center",
+    "icon": "SC-data-main/logo.png",
+    "title": "SCREEN COMPARE"
+  }
+}

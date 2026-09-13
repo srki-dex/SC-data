@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <title>SCREEN COMPARE</title>
+
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+
+    <style>
+        .screen-input {
+            width: 90px;
+            text-align: center;
+        }
+
+        .screen-result {
+            background: transparent;
+            border: 1px solid #555;
+            color: inherit;
+            width: 90px;
+            text-align: center;
+        }
+
+        #visualArea {
+            position: relative;
+            height: 315px;
+            background: #111;
+            border: 1px solid #444;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .visual-screen {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        #visualScreen1 {
+            background: rgba(0, 209, 255, 0.45);
+            border: 2px solid #00d1ff;
+            color: #fff;
+            z-index: 2;
+        }
+
+        #visualScreen2 {
+            background: rgba(0, 255, 179, 0.35);
+            border: 2px solid #00ffb3;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .difference-positive {
+            color: #00ff88;
+        }
+
+        .difference-negative {
+            color: #ff6b6b;
+        }
+
+        .difference-equal {
+            color: #aaa;
+            
+        }
+
+        #infoBox {
+            margin-top: 15px;
+            display: none;
+        }
+
+        #differenceText {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Screen information modal */
+
+        #screenInfoModal .modal-dialog {
+            max-width: 750px;
+        }
+
+        #screenInfoModal .modal-content {
+            min-height: 450px;
+        }
+
+        #screenInfoModal .modal-body {
+            padding: 30px;
+        }
+
+        #screenInfoText {
+            line-height: 1.7;
+        }
+    </style>
+</head>
+
+<body>
+
+<main>
+
+    <h1 class="text-center">Screen Compare</h1>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-6 text-center">
+                <button id="screenInfoBtn" class="btn btn-primary btn-sm">
+                    Info about your screen
+                </button>
+            </div>
+
+            <div class="col-6 text-center" style="padding-top: 4px;">
+                <label class="form-label">by&nbsp;</label>
+                <a href="https://srki-dex.github.io" data-external-link>srki-dex.github.io</a>
+            </div>
+
+        </div>
+
+        <div id="infoBox" class="alert alert-secondary"></div>
+    </div>
+
+
+    <!-- SCREEN INPUTS -->
+
+    <div class="container" style="margin-top: 26px;">
+
+        <div class="row text-center">
+
+            <!-- SCREEN 1 -->
+
+            <div class="col-6">
+
+                <p style="background:#00d1ff;
+                          margin-bottom:5px;
+                          color:#000;">
+                    Screen 1
+                </p>
+
+                <div class="row">
+
+                    <div class="col">
+                        <p>Width</p>
+                        <input id="width1"
+                               class="form-control-sm screen-input"
+                               type="number"
+                               min="1"
+                               step="any">
+                    </div>
+
+                    <div class="col">
+                        <p>Height</p>
+                        <input id="height1"
+                               class="form-control-sm screen-input"
+                               type="number"
+                               min="1"
+                               step="any">
+                    </div>
+
+                    <div class="col">
+                        <p>Inches</p>
+                        <input id="inches1"
+                               class="form-control-sm screen-input"
+                               type="number"
+                               min="1"
+                               step="any">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SCREEN 2 -->
+
+            <div class="col-6">
+
+                <p style="background:#00ffb3;
+                          margin-bottom:5px;
+                          color:#000;">
+                    Screen 2
+                </p>
+
+                <div class="row">
+
+                    <div class="col">
+                        <p>Width</p>
+                        <input id="width2"
+                               class="form-control-sm screen-input"
+                               type="number"
+                               min="1"
+                               step="any">
+                    </div>
+
+                    <div class="col">
+                        <p>Height</p>
+                        <input id="height2"
+                               class="form-control-sm screen-input"
+                               type="number"
+                               min="1"
+                               step="any">
+                    </div>
+
+                    <div class="col">
+                        <p>Inches</p>
+                        <input id="inches2"
+                               class="form-control-sm screen-input"
+                               type="number"
+                               min="1"
+                               step="any">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPARE -->
+
+    <div class="container text-center">
+        <button id="compareBtn"
+                class="btn btn-primary"
+                style="margin-top:20px;">
+            Compare
+        </button>
+    </div>
+
+
+    <!-- VISUAL -->
+
+    <div class="container"
+         style="padding-right:0;padding-left:0;">
+
+        <p class="text-center" style="margin-top:5px;">
+            Screen size visual overlay
+        </p>
+
+        <div id="visualArea">
+
+            <div id="visualScreen1"
+                 class="visual-screen">
+            </div>
+
+            <div id="visualScreen2"
+                 class="visual-screen">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="container" style="margin-top:16px;">
+
+        <div class="row">
+
+            <div class="col-6">
+                <p class="text-center">
+                    Stats
+                </p>
+            </div>
+
+            <div class="col-3">
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="radio"
+                           name="unit"
+                           id="useInches"
+                           checked>
+                    <label class="form-check-label"
+                           for="useInches">
+                        Use inches
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="radio"
+                           name="unit"
+                           id="useCm">
+                    <label class="form-check-label"
+                           for="useCm">
+                        Use cm
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STAT RESULTS -->
+
+    <div class="container" style="margin-top:5px;">
+
+        <div class="row text-center">
+
+            <!-- SCREEN 1 -->
+
+            <div class="col-md-6">
+
+                <p style="background:#00d1ff;
+                          margin-bottom:5px;
+                          color:#000;">
+                    Screen 1
+                </p>
+
+                <div class="row">
+
+                    <div class="col">
+                        <p>Width is</p>
+                        <input id="resultWidth1"
+                               class="form-control-sm screen-result"
+                               readonly>
+                    </div>
+
+                    <div class="col">
+                        <p>Height is</p>
+                        <input id="resultHeight1"
+                               class="form-control-sm screen-result"
+                               readonly>
+                    </div>
+
+                    <div class="col">
+                        <p>Area is</p>
+                        <input id="resultArea1"
+                               class="form-control-sm screen-result"
+                               readonly>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SCREEN 2 -->
+
+            <div class="col-md-6">
+
+                <p style="background:#00ffb3;
+                          margin-bottom:5px;
+                          color:#000;">
+                    Screen 2
+                </p>
+
+                <div class="row">
+
+                    <div class="col">
+                        <p>Width is</p>
+                        <input id="resultWidth2"
+                               class="form-control-sm screen-result"
+                               readonly>
+                    </div>
+
+                    <div class="col">
+                        <p>Height is</p>
+                        <input id="resultHeight2"
+                               class="form-control-sm screen-result"
+                               readonly>
+                    </div>
+
+                    <div class="col">
+                        <p>Area is</p>
+                        <input id="resultArea2"
+                               class="form-control-sm screen-result"
+                               readonly>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DIFFERENCE -->
+
+    <div class="container"
+         style="padding-right:0;padding-left:0;">
+
+        <p class="text-center"
+           style="margin-top:5px;margin-bottom:5px;">
+            % difference
+        </p>
+
+        <div id="differenceText" class="col">
+            Enter both screen sizes and press Compare.
+        </div>
+
+    </div>
+
+    <!-- SCREEN INFO MODAL -->
+
+    <div class="modal fade" id="screenInfoModal" tabindex="-1" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Display Information
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <pre id="screenInfoText"
+                        style="
+                            white-space: pre-wrap;
+                            font-family: monospace;
+                            font-size: 16px;
+                            margin: 0;
+                        "></pre>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="screen-compare.js"></script>
+
+</body>
+</html>
